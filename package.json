@@ -38,7 +38,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline",
-  "proxy_use_this_for direct_access": "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline",
-  "proxy_for_dev": "http://localhost:8080"
+  "proxy": "http://localhost:8080"
 }
