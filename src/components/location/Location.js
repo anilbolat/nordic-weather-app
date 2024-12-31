@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 function Location(props) {
-    let key = "YNYQLGJH3WDXKH2TR8N226T2X";
+    let key = process.env.REACT_APP_WEATHER_API_KEY;
     const [location, setLocation] = useState("");
     const [locationInput, setLocationInput] = useState("");
     const [date, setDate] = useState("");
