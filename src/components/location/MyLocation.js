@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 const MyLocation = (props) => {
+    let key = "YNYQLGJH3WDXKH2TR8N226T2X";
     const [location, setLocation] = useState("");
     const [locationInput, setLocationInput] = useState("");
     const [date, setDate] = useState("");
@@ -46,8 +47,8 @@ const MyLocation = (props) => {
     }
 
     const handleFethingWeatherInfo = (location, date) => {
-        //fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${encodeURIComponent(locationInput)}/${date}?key=${key}`)
-        fetch(`/api/v1/weather?location=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`)
+        fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${encodeURIComponent(locationInput)}/${date}?key=${key}`)
+        //fetch(`/api/v1/weather?location=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);

@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 function Location(props) {
-    let key = "";
+    let key = "YNYQLGJH3WDXKH2TR8N226T2X";
     const [location, setLocation] = useState("");
     const [locationInput, setLocationInput] = useState("");
     const [date, setDate] = useState("");
