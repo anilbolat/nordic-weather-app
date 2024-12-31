@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
+    const { dispatch } = useAuthContext();
+    const navigate = useNavigate();
 
     const handleInputChange = (event) => {
         event.preventDefault();
@@ -14,16 +18,22 @@ function Login(props) {
         login(formData.email, formData.password);
     }
 
-    const login = (email, password) => {
-        fetch("/api/v1/auth/login",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "email": email, "password": password })
+    const login = async (email, password) => {
+        const response = await fetch("/api/v1/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "email": email, "password": password })
+        });
+        const data = await response.json();
 
-            })
-            .then((response) => response.json(), (response) => console.log("login req is rejected: " + response))
-            .catch((reason) => console.log("reason: " + reason));
+        if (!response.ok) {
+            console.log("login is rejected: " + response);
+        }
+
+        if (response.ok && data.token) {
+            dispatch({ type: 'LOGIN', payload: JSON.stringify(data) });
+            navigate('/mylocation')
+        }
     }
 
     return (

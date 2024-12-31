@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Header from '../header/Header';
 
 function Register(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
@@ -29,18 +30,21 @@ function Register(props) {
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <form onSubmit={handleFormSubmit}>
-                <div style={{ textAlign: 'center', margin: '10px' }}>
-                    <input className="input-group-text" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} />
-                </div>
-                <div style={{ textAlign: 'center', margin: '10px' }}>
-                    <input className="input-group-text" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} />
-                </div>
-                <div style={{ textAlign: 'center', margin: '30px' }}>
-                    <button type="submit" className="btn btn-info">Sign up</button>
-                </div>
-            </form>
+        <div>
+            <Header />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <form onSubmit={handleFormSubmit}>
+                    <div style={{ textAlign: 'center', margin: '10px' }}>
+                        <input className="input-group-text" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} />
+                    </div>
+                    <div style={{ textAlign: 'center', margin: '10px' }}>
+                        <input className="input-group-text" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} />
+                    </div>
+                    <div style={{ textAlign: 'center', margin: '30px' }}>
+                        <button type="submit" className="btn btn-info">Sign up</button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 

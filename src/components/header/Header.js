@@ -12,6 +12,10 @@ function Header(props) {
         navigate('/login');
     }
 
+    function handleLogout() {
+        navigate('/logout');
+    }
+
     return (
         <header>
             <div className="card-footer">
@@ -19,6 +23,8 @@ function Header(props) {
                 <button className="btn" onClick={handleSignup}>Sign up</button>
                 <span> </span>
                 <button className="btn" onClick={handleLogin}>Login</button>
+                <span> </span>
+                <button className="btn" onClick={handleLogout}>Logout</button>
             </div>
         </header>
     );
