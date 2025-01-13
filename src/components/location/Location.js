@@ -19,8 +19,8 @@ function Location(props) {
     }
 
     const handleFethingWeatherInfo = () => {
-        fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${encodeURIComponent(locationInput)}/${date}?key=${key}`)
-            //fetch(`/api/v1/weather?location=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`)
+        //fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${encodeURIComponent(locationInput)}/${date}?key=${key}`)
+            fetch(`http://16.170.229.175:8080/api/v1/weather?location=${encodeURIComponent(locationInput)}&date=${encodeURIComponent(date)}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
