@@ -1,4 +1,5 @@
 import { WEATHER_API_BASE_URL } from "../../config.js";
+import MyHeader from '../header/MyHeader';
 import { useState } from "react";
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
@@ -36,7 +37,9 @@ function Location(props) {
     }
 
     return (
-        <div className="container mt-5">
+        <div>
+            <MyHeader />
+            <div className="container mt-5">
             <div className="row"></div>
             <div className="col-md-8 offset-md-2">
                 <div className="card text-center shadow">
@@ -78,6 +81,7 @@ function Location(props) {
 
                 </div>
             </div>
+        </div>
         </div>
     );
 }
