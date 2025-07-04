@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Header from '../header/Header';
+import { WEATHER_API_BASE_URL } from '../../config.js'
 
 function Register(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
@@ -19,7 +20,7 @@ function Register(props) {
     }
 
     const register = (email, password) => {
-        fetch("/api/v1/auth/register",
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/auth/register`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

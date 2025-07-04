@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import { WEATHER_API_BASE_URL } from '../../config.js';
 
 function Login(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
@@ -19,7 +20,7 @@ function Login(props) {
     }
 
     const login = async (email, password) => {
-        const response = await fetch("/api/v1/auth/login", {
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "email": email, "password": password })
