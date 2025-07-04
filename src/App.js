@@ -3,7 +3,7 @@ import Home from "./components/home/Home";
 import Register from "./components/register/Register";
 import Login from "./components/login/Login";
 import Logout from "./components/logout/Logout";
-import MyLocation from "./components/location/MyLocation";
+import Location from "./components/location/Location";
 import { useAuthContext } from "./hooks/useAuthContext";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
           <Route path="/register" element={loginData ? <Navigate to='/mylocation' /> : <Register />} />
           <Route path="/login" element={loginData ? <Navigate to='/mylocation' /> : <Login />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/mylocation" element={loginData ? <MyLocation /> : <Navigate to='/login' />} />
+          <Route path="/mylocation" element={loginData ? <Location /> : <Navigate to='/login' />} />
         </Routes>
       </BrowserRouter>
     </div>

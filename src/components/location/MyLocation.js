@@ -32,7 +32,7 @@ const MyLocation = (props) => {
     }
 
     const login = async (email, password) => {
-        const response = await fetch("/api/v1/weather/locations");
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations`);
         const data = await response.json();
 
         if (!response.ok) {
