@@ -106,11 +106,11 @@ function Location(props) {
 
             <div className="flex justify-center items-center mt-10">
                 <Card
-                    city={location}
+                    location={location}
                     date={date}
-                    tempHigh={tempMax}
-                    tempLow={tempMin}
-                    description={conditions}
+                    tempMax={tempMax}
+                    tempMin={tempMin}
+                    conditions={conditions}
                 />
             </div>
         </div>
