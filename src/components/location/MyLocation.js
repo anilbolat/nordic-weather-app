@@ -72,32 +72,32 @@ const MyLocation = (props) => {
         setFormData({ ...formData, [name]: value });
     }
 
-    const handleFormSubmit = (event) => {
+    const handleFetchingLocations = (event) => {
         event.preventDefault();
-        login(formData.email, formData.password);
+        fetchLocations();
     }
 
-    const login = async (email, password) => {
-        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations`);
-        //const data = await response.json();
+    const fetchLocations = async () => {
+        /*const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations`);
+        const data = await response.json();
         let data = await response.json();
 
         if (!response.ok) {
             console.log("getting locations is rejected: " + response);
-            data = JSON.parse(dataLocations);
         }
 
         if (response.ok) {
             console.log(data);
-        }
+        }*/
 
+        let data = JSON.parse(dataLocations);
         for (let i = 0; i < data.length; i++) {
             handleFethingWeatherInfo(data[i].location, data[i].date);
         }
     }
 
-    const handleFethingWeatherInfo = () => {
-        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather?location=${encodeURIComponent(locationInput)}&date=${encodeURIComponent(date)}`)
+    const handleFethingWeatherInfo = (location, date) => {
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather?location=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -105,12 +105,11 @@ const MyLocation = (props) => {
             })
             .catch(error => {
                 console.log(error);
-                
             })
             .then(
                 weatherDataList.push(...{
                         //location: data.resolvedAddress,
-                        location: locationInput,
+                        location: location,
                         date: date,
                         //tempMax: data.days[0].tempmax,
                         //tempMin: data.days[0].tempmin,
@@ -164,7 +163,7 @@ const MyLocation = (props) => {
 
                 <div className="text-center mt-4">
                     <button
-                        onClick={login}
+                        onClick={handleFetchingLocations}
                         className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
                     >
                         Get Weather
