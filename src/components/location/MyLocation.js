@@ -33,7 +33,7 @@ const MyLocation = (props) => {
         }
     ]`;
 
-    const weatherDataList = [
+    const weatherDataListInit = [
         {
             location: 'Vuores',
             date: '2025-07-14',
@@ -60,6 +60,7 @@ const MyLocation = (props) => {
     const [locationInput, setLocationInput] = useState("");
     const [date, setDate] = useState("");
     const [formData, setFormData] = useState({ "email": "", "password": "" });
+    const [weatherDataList, setWeatherDataList] = useState(weatherDataListInit);
 
     const handleLocationInput = (event) => {
         event.preventDefault();
@@ -101,22 +102,20 @@ const MyLocation = (props) => {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                
+                const newWeatherData = {
+                    location: data.resolvedAddress,
+                    date: date,
+                    tempMax: data.days[0].tempmax,
+                    tempMin: data.days[0].tempmin,
+                    conditions: data.days[0].conditions
+                };
+                setWeatherDataList(prevList => [...prevList, newWeatherData]);
+
             })
             .catch(error => {
-                console.log(error);
-            })
-            .then(
-                weatherDataList.push(...{
-                        //location: data.resolvedAddress,
-                        location: location,
-                        date: date,
-                        //tempMax: data.days[0].tempmax,
-                        //tempMin: data.days[0].tempmin,
-                        //conditions: data.days[0].conditions
-                    }
-                )
-            );
+                console.log("API error:", error);
+                setWeatherDataList(prevList => [...prevList, weatherDataListInit]);
+            });
     }
 
     const convertFahrenheitToCelcius = (fahrenheit) => {
@@ -172,7 +171,7 @@ const MyLocation = (props) => {
                 </div>
             </div>
 
-            <div className="flex justify-center items-center gap-6 mt-10">
+            <div className="flex flex-col items-center gap-6 mt-10">
                 {
                     weatherDataList.map((weather, index) => (
                         <Card
