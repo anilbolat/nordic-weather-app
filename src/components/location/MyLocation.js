@@ -1,23 +1,69 @@
 import { WEATHER_API_BASE_URL } from '../../config.js';
+import Card from '../location/Card.js'
+import { Weather } from './Weather.js';
 import { useState } from 'react';
 import MyHeader from '../header/MyHeader';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
+import { data } from 'react-router-dom';
 
 
 const MyLocation = (props) => {
-    const [location, setLocation] = useState("");
+    const dataLocations = `[
+        {
+            "location": "Vuores",
+            "date": "2025-08-14"
+        },
+        {
+            "location": "Porto",
+            "date": "2025-08-14"
+        },
+        {
+            "location": "Sardenia",
+            "date": "2025-08-14"
+        },
+        {
+            "location": "Palermo",
+            "date": "2025-08-14"
+        },
+        {
+            "location": "Izmir",
+            "date": "2025-08-14"
+        }
+    ]`;
+
+    const weatherDataList = [
+        {
+            location: 'Vuores',
+            date: '2025-07-14',
+            tempMax: '22°',
+            tempMin: '14°',
+            conditions: 'Sunny',
+        },
+        {
+            location: 'Porto',
+            date: '2025-07-14',
+            tempMax: '41°',
+            tempMin: '32°',
+            conditions: 'Clear',
+        },
+        {
+            location: 'Sardenia',
+            date: '2025-07-14',
+            tempMax: '20°',
+            tempMin: '13°',
+            conditions: 'Cloudy',
+        },
+    ];
+
     const [locationInput, setLocationInput] = useState("");
     const [date, setDate] = useState("");
-    const [temperature, setTemperature] = useState("- °C");
-
     const [formData, setFormData] = useState({ "email": "", "password": "" });
 
     const handleLocationInput = (event) => {
         event.preventDefault();
         setLocationInput(event.target.value);
-        setTemperature("- °C");
     }
 
     const handleInputChange = (event) => {
@@ -33,30 +79,45 @@ const MyLocation = (props) => {
 
     const login = async (email, password) => {
         const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations`);
-        const data = await response.json();
+        //const data = await response.json();
+        let data = await response.json();
 
         if (!response.ok) {
             console.log("getting locations is rejected: " + response);
+            data = JSON.parse(dataLocations);
         }
 
         if (response.ok) {
             console.log(data);
         }
 
-        handleFethingWeatherInfo(data[0].location, data[0].date);
+        for (let i = 0; i < data.length; i++) {
+            handleFethingWeatherInfo(data[i].location, data[i].date);
+        }
     }
 
-    const handleFethingWeatherInfo = (location, date) => {
+    const handleFethingWeatherInfo = () => {
         fetch(`${WEATHER_API_BASE_URL}/api/v1/weather?location=${encodeURIComponent(locationInput)}&date=${encodeURIComponent(date)}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                setLocation(data.resolvedAddress);
-                setTemperature(convertFahrenheitToCelcius(data.days[0].temp) + " °C ");
+                
             })
             .catch(error => {
                 console.log(error);
-            });
+                
+            })
+            .then(
+                weatherDataList.push(...{
+                        //location: data.resolvedAddress,
+                        location: locationInput,
+                        date: date,
+                        //tempMax: data.days[0].tempmax,
+                        //tempMin: data.days[0].tempmin,
+                        //conditions: data.days[0].conditions
+                    }
+                )
+            );
     }
 
     const convertFahrenheitToCelcius = (fahrenheit) => {
@@ -64,53 +125,71 @@ const MyLocation = (props) => {
     }
 
     return (
-        <div>
-            <MyHeader />
-            <div className="container mt-5">
-                <div className="row"></div>
-                <div className="col-md-8 offset-md-2">
-                    <div className="card text-center shadow">
-                        <div className="card-header bg-primary text-white">
-                            <h2>Weather App</h2>
-                        </div>
-                        <div className="card-body">
-                            <h4 className="card-title">{location}</h4>
-                            <p className="card-text">
-                                Temperature: {temperature}
-                            </p>
-                        </div>
+    <div>
+        <MyHeader />
+        <div className="max-w-3xl mx-auto mt-10 px-4">
+            <div className="bg-white rounded-xl shadow-md p-6">
+                <div className="bg-blue-600 text-white text-center rounded-md py-4 mb-6">
+                    <h2 className="text-2xl font-semibold">Weather App</h2>
+                </div>
 
-                        <div>
-                            <label htmlFor="dateInput" className="form-label">Date: </label>
-                            <DatePicker
-                                className="form-control"
-                                id="dateInput"
-                                selected={date}
-                                onChange={(newDate) => setDate(format(newDate, 'yyyy-MM-dd'))}
-                                dateFormat={"yyyy-MM-dd"}
-                                placeholderText="Pick a date"
-                            />
-                        </div>
-
-                        <label htmlFor="locationInput" className="form-label">Location: </label>
-                        <input
-                            type="text"
-                            id="locationInput"
-                            className="form-control"
-                            placeholder="Type your location here ..."
-                            value={locationInput}
-                            onChange={handleLocationInput}
+                <div className="grid grid-cols-1 gap-4">
+                    <div>
+                        <label htmlFor="dateInput" className="block text-sm font-medium text-gray-700 mb-1">
+                        Date
+                        </label>
+                        <DatePicker
+                        id="dateInput"
+                        selected={date}
+                        onChange={(newDate) => setDate(format(newDate, 'yyyy-MM-dd'))}
+                        dateFormat="yyyy-MM-dd"
+                        placeholderText="Pick a date"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-
-                        <div className="card-footer mb-auto">
-                            <button className="btn btn-primary" onClick={login}>Click for weather</button>
-                        </div>
-
                     </div>
+
+                <div>
+                    <label htmlFor="locationInput" className="block text-sm font-medium text-gray-700 mb-1">
+                        Location
+                    </label>
+                    <input
+                        type="text"
+                        id="locationInput"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Type your location here ..."
+                        value={locationInput}
+                        onChange={handleLocationInput}
+                    />
+                </div>
+
+                <div className="text-center mt-4">
+                    <button
+                        onClick={login}
+                        className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+                    >
+                        Get Weather
+                    </button>
+                </div>
                 </div>
             </div>
+
+            <div className="flex justify-center items-center gap-6 mt-10">
+                {
+                    weatherDataList.map((weather, index) => (
+                        <Card
+                            key={index}
+                            location={weather.location}
+                            date={weather.date}
+                            tempMax={weather.tempMax}
+                            tempMin={weather.tempMin}
+                            conditions={weather.conditions}
+                        />
+                    ))
+                }
+            </div>
         </div>
-    );
+    </div>
+);
 }
 
 export default MyLocation;
