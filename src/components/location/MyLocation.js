@@ -1,66 +1,47 @@
 import { WEATHER_API_BASE_URL } from '../../config.js';
 import Card from '../location/Card.js'
-import { Weather } from './Weather.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MyHeader from '../header/MyHeader';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
-import { data } from 'react-router-dom';
+
+const dataLocations = [
+    {
+        "location": "Vuores",
+        "date": "2025-08-14"
+    },
+    {
+        "location": "Porto",
+        "date": "2025-08-14"
+    },
+    {
+        "location": "Sardenia",
+        "date": "2025-08-14"
+    },
+    {
+        "location": "Palermo",
+        "date": "2025-08-14"
+    },
+    {
+        "location": "Izmir",
+        "date": "2025-08-14"
+    }
+];
 
 
-const MyLocation = (props) => {
-    const dataLocations = `[
-        {
-            "location": "Vuores",
-            "date": "2025-08-14"
-        },
-        {
-            "location": "Porto",
-            "date": "2025-08-14"
-        },
-        {
-            "location": "Sardenia",
-            "date": "2025-08-14"
-        },
-        {
-            "location": "Palermo",
-            "date": "2025-08-14"
-        },
-        {
-            "location": "Izmir",
-            "date": "2025-08-14"
-        }
-    ]`;
-
-    const weatherDataListInit = [
-        {
-            location: 'Vuores',
-            date: '2025-07-14',
-            tempMax: '22°',
-            tempMin: '14°',
-            conditions: 'Sunny',
-        },
-        {
-            location: 'Porto',
-            date: '2025-07-14',
-            tempMax: '41°',
-            tempMin: '32°',
-            conditions: 'Clear',
-        },
-        {
-            location: 'Sardenia',
-            date: '2025-07-14',
-            tempMax: '20°',
-            tempMin: '13°',
-            conditions: 'Cloudy',
-        },
-    ];
+function MyLocation(props) {
+    const [weatherDataList, setWeatherDataList] = useState([]);
 
     const [locationInput, setLocationInput] = useState("");
     const [date, setDate] = useState("");
     const [formData, setFormData] = useState({ "email": "", "password": "" });
-    const [weatherDataList, setWeatherDataList] = useState(weatherDataListInit);
+
+    useEffect(() => {
+        dataLocations.forEach(({location, date}) => {
+            handleFethingWeatherInfo(location, date);
+        });
+    }, []);
 
     const handleLocationInput = (event) => {
         event.preventDefault();
@@ -75,7 +56,7 @@ const MyLocation = (props) => {
 
     const handleFetchingLocations = (event) => {
         event.preventDefault();
-        fetchLocations();
+        //fetchLocations();
     }
 
     const fetchLocations = async () => {
@@ -105,8 +86,8 @@ const MyLocation = (props) => {
                 const newWeatherData = {
                     location: data.resolvedAddress,
                     date: date,
-                    tempMax: data.days[0].tempmax,
-                    tempMin: data.days[0].tempmin,
+                    tempMax: convertFahrenheitToCelcius(data.days[0].tempmax),
+                    tempMin: convertFahrenheitToCelcius(data.days[0].tempmin),
                     conditions: data.days[0].conditions
                 };
                 setWeatherDataList(prevList => [...prevList, newWeatherData]);
@@ -114,7 +95,6 @@ const MyLocation = (props) => {
             })
             .catch(error => {
                 console.log("API error:", error);
-                setWeatherDataList(prevList => [...prevList, weatherDataListInit]);
             });
     }
 
