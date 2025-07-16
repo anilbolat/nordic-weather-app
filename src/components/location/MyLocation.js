@@ -34,7 +34,7 @@ function MyLocation(props) {
     const [weatherDataList, setWeatherDataList] = useState([]);
 
     const [locationInput, setLocationInput] = useState("");
-    const [date, setDate] = useState("");
+    const [dateInput, setDateInput] = useState("");
     const [formData, setFormData] = useState({ "email": "", "password": "" });
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function MyLocation(props) {
 
     const handleFetchingLocations = (event) => {
         event.preventDefault();
-        //fetchLocations();
+        handleFethingWeatherInfo(locationInput, dateInput);
     }
 
     const fetchLocations = async () => {
@@ -118,8 +118,8 @@ function MyLocation(props) {
                         </label>
                         <DatePicker
                         id="dateInput"
-                        selected={date}
-                        onChange={(newDate) => setDate(format(newDate, 'yyyy-MM-dd'))}
+                        selected={dateInput}
+                        onChange={(newDateInput) => setDateInput(format(newDateInput, 'yyyy-MM-dd'))}
                         dateFormat="yyyy-MM-dd"
                         placeholderText="Pick a date"
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
