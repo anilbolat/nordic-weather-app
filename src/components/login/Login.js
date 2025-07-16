@@ -38,20 +38,42 @@ function Login(props) {
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <form onSubmit={handleFormSubmit}>
-                <div style={{ textAlign: 'center', margin: '10px' }}>
-                    <input className="input-group-text" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} />
-                </div>
-                <div style={{ textAlign: 'center', margin: '10px' }}>
-                    <input className="input-group-text" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} />
-                </div>
-                <div style={{ textAlign: 'center', margin: '30px' }}>
-                    <button type="submit" className="btn btn-info">Login</button>
-                </div>
+        <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
+            <form onSubmit={handleFormSubmit} className="w-full max-w-sm bg-white p-6 rounded shadow">
+            <div className="mb-4">
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                />
+            </div>
+            <div className="mb-4">
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                />
+            </div>
+            <div>
+                <button
+                    type="submit"
+                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                >
+                    Login
+                </button>
+            </div>
             </form>
         </div>
     );
+
 
 }
 
