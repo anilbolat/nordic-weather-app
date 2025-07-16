@@ -31,23 +31,50 @@ function Register(props) {
     }
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-50">
             <Header />
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <form onSubmit={handleFormSubmit}>
-                    <div style={{ textAlign: 'center', margin: '10px' }}>
-                        <input className="input-group-text" type="text" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} />
-                    </div>
-                    <div style={{ textAlign: 'center', margin: '10px' }}>
-                        <input className="input-group-text" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} />
-                    </div>
-                    <div style={{ textAlign: 'center', margin: '30px' }}>
-                        <button type="submit" className="btn btn-info">Sign up</button>
-                    </div>
-                </form>
+            <div className="flex justify-center items-center h-[calc(100vh-4rem)] px-4">
+            <form
+                onSubmit={handleFormSubmit}
+                className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md"
+            >
+                <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
+
+                <div className="mb-4">
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                />
+                </div>
+
+                <div className="mb-6">
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                />
+                </div>
+
+                <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                >
+                Sign up
+                </button>
+            </form>
             </div>
         </div>
     );
+
 
 }
 
