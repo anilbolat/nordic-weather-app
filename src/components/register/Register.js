@@ -6,12 +6,8 @@ function Register(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
 
     const handleInputChange = (event) => {
-        event.preventDefault();
         const { name, value } = event.target;
-        
-        console.log(formData);
         setFormData({ ...formData, [name]: value });
-        console.log(formData);
     }
 
     const handleFormSubmit = (event) => {
