@@ -16,7 +16,7 @@ const dataLocations = [
         "date": "2025-08-14"
     },
     {
-        "location": "Sardenia",
+        "location": "Sardegna",
         "date": "2025-08-14"
     },
     {
