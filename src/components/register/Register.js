@@ -1,9 +1,10 @@
 import { useState } from "react";
-import Header from '../header/Header';
+import { useNavigate } from "react-router-dom";
 import { WEATHER_API_BASE_URL } from '../../config.js'
 
 function Register(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
+    const navigate = useNavigate();
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -15,15 +16,21 @@ function Register(props) {
         register(formData.email, formData.password);
     }
 
-    const register = (email, password) => {
-        fetch(`${WEATHER_API_BASE_URL}/api/v1/auth/register`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "email": email, "password": password })
-            })
-            .then((response) => response.json(), (response) => console.log("register req is rejected: " + response))
-            .catch((reason) => console.log("reason: " + reason));
+    const register = async (email, password) => {
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "email": email, "password": password })
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.log("register is rejected: " + response);
+        }
+
+        if (response.ok) {
+            navigate('/login')
+        }
     }
 
     return (
