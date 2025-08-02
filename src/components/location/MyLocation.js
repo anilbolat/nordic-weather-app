@@ -45,28 +45,8 @@ function MyLocation(props) {
         /*dataLocations.forEach(({location, date}) => {
             handleFethingWeatherInfo(location, date);
         });*/
-        handleFetchingUserWeathers(email);
+        fetchLocations(email);
     }, []);
-
-    const handleFetchingUserWeathers = (email) => {
-        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                const newWeatherData = {
-                    location: data.resolvedAddress,
-                    date: date,
-                    tempMax: convertFahrenheitToCelcius(data.days[0].tempmax),
-                    tempMin: convertFahrenheitToCelcius(data.days[0].tempmin),
-                    conditions: data.days[0].conditions
-                };
-                setWeatherDataList(prevList => [...prevList, newWeatherData]);
-
-            })
-            .catch(error => {
-                console.log("API error:", error);
-            });
-    }
 
     const handleLocationInput = (event) => {
         event.preventDefault();
@@ -84,9 +64,8 @@ function MyLocation(props) {
         handleFethingWeatherInfo(locationInput, dateInput);
     }
 
-    const fetchLocations = async () => {
-        /*const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations`);
-        const data = await response.json();
+    const fetchLocations = async (email) => {
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`);
         let data = await response.json();
 
         if (!response.ok) {
@@ -95,9 +74,8 @@ function MyLocation(props) {
 
         if (response.ok) {
             console.log(data);
-        }*/
+        }
 
-        let data = JSON.parse(dataLocations);
         for (let i = 0; i < data.length; i++) {
             handleFethingWeatherInfo(data[i].location, data[i].date);
         }
