@@ -33,7 +33,7 @@ function Login(props) {
 
         if (response.ok && data.token) {
             dispatch({ type: 'LOGIN', payload: JSON.stringify(data) });
-            navigate('/mylocation')
+            navigate('/mylocation', { state: { email: email } });
         }
     }
 

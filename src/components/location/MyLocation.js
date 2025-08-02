@@ -1,6 +1,7 @@
 import { WEATHER_API_BASE_URL } from '../../config.js';
 import Card from '../location/Card.js'
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import MyHeader from '../header/MyHeader';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
@@ -33,15 +34,39 @@ const dataLocations = [
 function MyLocation(props) {
     const [weatherDataList, setWeatherDataList] = useState([]);
 
+    const location = useLocation();
+    const email = location.state?.email;
+
     const [locationInput, setLocationInput] = useState("");
     const [dateInput, setDateInput] = useState("");
     const [formData, setFormData] = useState({ "email": "", "password": "" });
 
     useEffect(() => {
-        dataLocations.forEach(({location, date}) => {
+        /*dataLocations.forEach(({location, date}) => {
             handleFethingWeatherInfo(location, date);
-        });
+        });*/
+        handleFetchingUserWeathers(email);
     }, []);
+
+    const handleFetchingUserWeathers = (email) => {
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const newWeatherData = {
+                    location: data.resolvedAddress,
+                    date: date,
+                    tempMax: convertFahrenheitToCelcius(data.days[0].tempmax),
+                    tempMin: convertFahrenheitToCelcius(data.days[0].tempmin),
+                    conditions: data.days[0].conditions
+                };
+                setWeatherDataList(prevList => [...prevList, newWeatherData]);
+
+            })
+            .catch(error => {
+                console.log("API error:", error);
+            });
+    }
 
     const handleLocationInput = (event) => {
         event.preventDefault();
