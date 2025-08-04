@@ -83,7 +83,7 @@ function MyLocation(props) {
             body: JSON.stringify({ email: email, location: location, date: date })
         };
 
-        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather}`, req)
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather`, req)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
