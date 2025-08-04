@@ -60,8 +60,9 @@ function MyLocation(props) {
     }
 
     const fetchLocations = (email) => {
+        let data;
         fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`)
-            .then(response => response.json())
+            .then(response => data = response.json())
             .then(data => {
                 console.log(data);
             })
