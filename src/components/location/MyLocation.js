@@ -34,7 +34,7 @@ const dataLocations = [
 function MyLocation(props) {
     const [weatherDataList, setWeatherDataList] = useState([]);
 
-    const { email } = useAuthContext();
+    const { email, loginData } = useAuthContext();
 
     const [locationInput, setLocationInput] = useState("");
     const [dateInput, setDateInput] = useState("");
@@ -79,7 +79,7 @@ function MyLocation(props) {
     const handleAddingUserWeatherInfo = (email, location, date) => {
         const req = {
             method: 'POST',
-            hedaers: { 'Content-Type': 'application/json' },
+            hedaers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${loginData}` },
             body: JSON.stringify({ email: email, location: location, date: date })
         };
 
