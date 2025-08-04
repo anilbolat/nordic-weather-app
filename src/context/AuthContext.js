@@ -5,6 +5,9 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
     let initLoginData = '';
+
+    const [email, setEmail] = useState('');
+
     const [loginData, dispatch] = useReducer(authReducer, initLoginData, 
         () => {
             const localData = localStorage.getItem('loginData');
@@ -15,9 +18,16 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
       localStorage.setItem('loginData', loginData);
     }, [loginData])
+
+    const value = {
+        email,
+        setEmail,
+        loginData,
+        dispatch
+    };
     
     return (
-        <AuthContext.Provider value={{ loginData, dispatch }} >
+        <AuthContext.Provider value={value} >
             {children}
         </AuthContext.Provider>
     );

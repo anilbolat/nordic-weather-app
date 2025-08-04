@@ -1,11 +1,11 @@
 import { WEATHER_API_BASE_URL } from '../../config.js';
 import Card from '../location/Card.js'
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import MyHeader from '../header/MyHeader';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
+import { useAuthContext } from '../../hooks/useAuthContext.js';
 
 const dataLocations = [
     {
@@ -34,29 +34,23 @@ const dataLocations = [
 function MyLocation(props) {
     const [weatherDataList, setWeatherDataList] = useState([]);
 
-    const location = useLocation();
-    const email = location.state?.email;
+    const { email } = useAuthContext();
 
     const [locationInput, setLocationInput] = useState("");
     const [dateInput, setDateInput] = useState("");
-    const [formData, setFormData] = useState({ "email": "", "password": "" });
 
     useEffect(() => {
         /*dataLocations.forEach(({location, date}) => {
             handleFethingWeatherInfo(location, date);
         });*/
-        fetchLocations(email);
+        if (email) {
+            fetchLocations(email);
+        }
     }, []);
 
     const handleLocationInput = (event) => {
         event.preventDefault();
         setLocationInput(event.target.value);
-    }
-
-    const handleInputChange = (event) => {
-        event.preventDefault();
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
     }
 
     const handleFetchingLocations = (event) => {

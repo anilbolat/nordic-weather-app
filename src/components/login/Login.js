@@ -5,7 +5,7 @@ import { WEATHER_API_BASE_URL } from '../../config.js';
 
 function Login(props) {
     const [formData, setFormData] = useState({ "email": "", "password": "" });
-    const { dispatch } = useAuthContext();
+    const { setEmail, dispatch } = useAuthContext();
     const navigate = useNavigate();
 
     const handleInputChange = (event) => {
@@ -33,7 +33,8 @@ function Login(props) {
 
         if (response.ok && data.token) {
             dispatch({ type: 'LOGIN', payload: JSON.stringify(data) });
-            navigate('/mylocation', { state: { email: email } });
+            setEmail(email);
+            navigate('/mylocation');
         }
     }
 
