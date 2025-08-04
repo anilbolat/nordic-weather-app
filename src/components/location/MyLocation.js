@@ -55,6 +55,7 @@ function MyLocation(props) {
 
     const handleFetchingLocations = (event) => {
         event.preventDefault();
+        handleAddingUserWeatherInfo(email, locationInput, dateInput);
         handleFethingWeatherInfo(locationInput, dateInput);
     }
 
@@ -73,6 +74,23 @@ function MyLocation(props) {
         for (let i = 0; i < data.length; i++) {
             handleFethingWeatherInfo(data[i].location, data[i].date);
         }
+    }
+
+    const handleAddingUserWeatherInfo = (email, location, date) => {
+        const req = {
+            method: 'POST',
+            hedaers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, location: location, date: date })
+        };
+
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather}`, req)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.log("API error:", error);
+            });
     }
 
     const handleFethingWeatherInfo = (location, date) => {
