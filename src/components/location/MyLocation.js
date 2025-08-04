@@ -59,7 +59,22 @@ function MyLocation(props) {
         handleFethingWeatherInfo(locationInput, dateInput);
     }
 
-    const fetchLocations = async (email) => {
+    const fetchLocations = (email) => {
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.log("API error:", error);
+            });
+
+        for (let i = 0; i < data.length; i++) {
+            handleFethingWeatherInfo(data[i].location, data[i].date);
+        }
+    }
+
+    const fetchLocationsAsync = async (email) => {
         const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`);
         let data = await response.json();
 
