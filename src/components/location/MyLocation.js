@@ -79,7 +79,7 @@ function MyLocation(props) {
     const handleAddingUserWeatherInfo = (email, location, date) => {
         const req = {
             method: 'POST',
-            hedaers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${loginData}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${loginData}` },
             body: JSON.stringify({ email: email, location: location, date: date })
         };
 
