@@ -48,7 +48,7 @@ function MyLocation(props) {
             //fetchLocations();
             fetchUserWeathersAsync();
         }
-    }, []);
+    }, [weatherDataList]);
 
     const handleLocationInput = (event) => {
         event.preventDefault();
