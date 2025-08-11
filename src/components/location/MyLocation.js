@@ -99,10 +99,10 @@ function MyLocation(props) {
             let weatherObj = JSON.parse(data[i].weather);
             const newWeather = {
                 location: weatherObj.resolvedAddress,
-                date: data[i].date,
-                tempMax: convertFahrenheitToCelcius(weatherObj.days[i].tempmax),
-                tempMin: convertFahrenheitToCelcius(weatherObj.days[i].tempmin),
-                conditions: weatherObj.days[i].conditions
+                date: weatherObj.days[0].datetime,
+                tempMax: convertFahrenheitToCelcius(weatherObj.days[0].tempmax),
+                tempMin: convertFahrenheitToCelcius(weatherObj.days[0].tempmin),
+                conditions: weatherObj.days[0].conditions
             };
             weathers = [...weathers, newWeather];
         }
