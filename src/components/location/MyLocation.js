@@ -104,7 +104,7 @@ function MyLocation(props) {
             weathers = [...weathers, newWeather];
         }
 
-        setWeatherDataList(newWeatherData);
+        setWeatherDataList(weathers);
 
         /*
         for (let i = 0; i < data.length; i++) {
