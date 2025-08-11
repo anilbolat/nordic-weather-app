@@ -78,7 +78,8 @@ function MyLocation(props) {
 
     const fetchUserWeathersAsync = async () => {
         const req = {
-            method: 'GET'
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${loginData}` }
         };
         const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/user/locations/weather`, req);
         let data = await response.json();
