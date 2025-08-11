@@ -94,7 +94,7 @@ function MyLocation(props) {
 
         let weathers = [];
         for (let i=0; i < data.length; i++) {
-            let weatherObj = JSON.parse(data[0].weather);
+            let weatherObj = JSON.parse(data[i].weather);
             const newWeather = {
                 location: weatherObj.resolvedAddress,
                 date: data[i].date,
