@@ -43,8 +43,9 @@ function MyLocation(props) {
         /*dataLocations.forEach(({location, date}) => {
             handleFethingWeatherInfo(location, date);
         });*/
-        if (email) {
-            fetchLocations(email);
+        if (loginData) {
+            //fetchLocations();
+            fetchUserWeathersAsync();
         }
     }, []);
 
@@ -55,7 +56,7 @@ function MyLocation(props) {
 
     const handleFetchingLocations = (event) => {
         event.preventDefault();
-        handleAddingUserWeatherInfo(email, locationInput, dateInput);
+        handleAddingUserWeatherInfo(locationInput, dateInput);
         handleFethingWeatherInfo(locationInput, dateInput);
     }
 
@@ -75,8 +76,12 @@ function MyLocation(props) {
         }
     }
 
-    const fetchLocationsAsync = async (email) => {
-        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`);
+    const fetchUserWeathersAsync = async () => {
+        const req = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${loginData}` }
+        };
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/user/locations/weather`, req);
         let data = await response.json();
 
         if (!response.ok) {
@@ -87,19 +92,35 @@ function MyLocation(props) {
             console.log(data);
         }
 
+        const weathers = [];
+        for (let i=0; i < data.length; i++) {
+            const newWeather = {
+                location: data[i].location,
+                date: data[i].date,
+                tempMax: convertFahrenheitToCelcius(data[i].weather.days[0].tempmax),
+                tempMin: convertFahrenheitToCelcius(data[i].weather.days[0].tempmin),
+                conditions: data[i].weather.days[0].conditions
+            };
+            weathers = [...weathers, newWeather];
+        }
+
+        setWeatherDataList(newWeatherData);
+
+        /*
         for (let i = 0; i < data.length; i++) {
             handleFethingWeatherInfo(data[i].location, data[i].date);
         }
+        */
     }
 
-    const handleAddingUserWeatherInfo = (email, location, date) => {
+    const handleAddingUserWeatherInfo = (location, date) => {
         const req = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${loginData}` },
-            body: JSON.stringify({ email: email, location: location, date: date })
+            body: JSON.stringify({ location: location, date: date })
         };
 
-        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather`, req)
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/user/locations/weather`, req)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
