@@ -92,7 +92,7 @@ function MyLocation(props) {
             console.log(data);
         }
 
-        const weathers = [];
+        let weathers = [];
         for (let i=0; i < data.length; i++) {
             let weatherObj = JSON.parse(data[0].weather);
             const newWeather = {
