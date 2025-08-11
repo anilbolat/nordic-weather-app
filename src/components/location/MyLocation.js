@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import { useAuthContext } from '../../hooks/useAuthContext.js';
 
+/*
 const dataLocations = [
     {
         "location": "Vuores",
@@ -29,12 +30,12 @@ const dataLocations = [
         "date": "2025-08-14"
     }
 ];
-
+*/
 
 function MyLocation(props) {
     const [weatherDataList, setWeatherDataList] = useState([]);
 
-    const { email, loginData } = useAuthContext();
+    const { loginData } = useAuthContext();
 
     const [locationInput, setLocationInput] = useState("");
     const [dateInput, setDateInput] = useState("");
@@ -57,9 +58,9 @@ function MyLocation(props) {
     const handleFetchingLocations = (event) => {
         event.preventDefault();
         handleAddingUserWeatherInfo(locationInput, dateInput);
-        handleFethingWeatherInfo(locationInput, dateInput);
     }
 
+    /*
     const fetchLocations = (email) => {
         let data;
         fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`)
@@ -75,6 +76,7 @@ function MyLocation(props) {
             handleFethingWeatherInfo(data[i].location, data[i].date);
         }
     }
+    */
 
     const fetchUserWeathersAsync = async () => {
         const req = {
@@ -98,9 +100,9 @@ function MyLocation(props) {
             const newWeather = {
                 location: weatherObj.resolvedAddress,
                 date: data[i].date,
-                tempMax: convertFahrenheitToCelcius(weatherObj.days[0].tempmax),
-                tempMin: convertFahrenheitToCelcius(weatherObj.days[0].tempmin),
-                conditions: weatherObj.days[0].conditions
+                tempMax: convertFahrenheitToCelcius(weatherObj.days[i].tempmax),
+                tempMin: convertFahrenheitToCelcius(weatherObj.days[i].tempmin),
+                conditions: weatherObj.days[i].conditions
             };
             weathers = [...weathers, newWeather];
         }
@@ -125,12 +127,22 @@ function MyLocation(props) {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                const newWeatherData = {
+                    location: data.resolvedAddress,
+                    date: date,
+                    tempMax: convertFahrenheitToCelcius(data.days[0].tempmax),
+                    tempMin: convertFahrenheitToCelcius(data.days[0].tempmin),
+                    conditions: data.days[0].conditions
+                };
+                setWeatherDataList(prevList => [...prevList, newWeatherData]);
+
             })
             .catch(error => {
                 console.log("API error:", error);
             });
     }
 
+    /*
     const handleFethingWeatherInfo = (location, date) => {
         fetch(`${WEATHER_API_BASE_URL}/api/v1/weather?location=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`)
             .then(response => response.json())
@@ -150,6 +162,7 @@ function MyLocation(props) {
                 console.log("API error:", error);
             });
     }
+    */
 
     const convertFahrenheitToCelcius = (fahrenheit) => {
         return Math.round((fahrenheit - 32) * 5 / 9);
