@@ -134,8 +134,13 @@ function MyLocation(props) {
                     tempMin: convertFahrenheitToCelcius(data.days[0].tempmin),
                     conditions: data.days[0].conditions
                 };
-                setWeatherDataList(prevList => [...prevList, newWeatherData]);
-
+                setWeatherDataList(prevList => {
+                    const newList = [...prevList, newWeatherData];
+                    if (newList.length > 10) {
+                        newList.shift();
+                    }
+                    return newList;
+                });
             })
             .catch(error => {
                 console.log("API error:", error);
