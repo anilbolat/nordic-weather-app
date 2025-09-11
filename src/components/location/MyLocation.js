@@ -39,14 +39,21 @@ function MyLocation(props) {
 
     const [locationInput, setLocationInput] = useState("");
     const [dateInput, setDateInput] = useState("");
+    const [tempMax, setTempMax] = useState("");
+    const [tempMin, setTempMin] = useState("");
+    const [conditions, setConditions] = useState("");
+
+    /*
+    useEffect(() => {
+        dataLocations.forEach(({location, date}) => {
+            handleFethingWeatherInfo(location, date);
+        });
+    }, []);
+    */
 
     useEffect(() => {
-        /*dataLocations.forEach(({location, date}) => {
-            handleFethingWeatherInfo(location, date);
-        });*/
         if (loginData) {
-            //fetchLocations();
-            fetchUserWeathersAsync();
+            fetchUserLocationsWeathersAsync();
         }
     }, []);
 
@@ -55,30 +62,45 @@ function MyLocation(props) {
         setLocationInput(event.target.value);
     }
 
-    const handleFetchingLocations = (event) => {
+    // GET WEATHER
+
+    const handleGetWeather = (event) => {
         event.preventDefault();
-        handleAddingUserWeatherInfo(locationInput, dateInput);
+        fetchWeather(locationInput, dateInput);
     }
 
-    /*
-    const fetchLocations = (email) => {
-        let data;
-        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather/locations?email=${encodeURIComponent(email)}`)
-            .then(response => data = response.json())
+    const fetchWeather = (location, date) => {
+        fetch(`${WEATHER_API_BASE_URL}/api/v1/weather?location=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`)
+            .then(response => response.json())
             .then(data => {
                 console.log(data);
+                setLocationInput(data.resolvedAddress);
+                setTempMax(convertFahrenheitToCelcius(data.days[0].tempmax) + "°");
+                setTempMin(convertFahrenheitToCelcius(data.days[0].tempmin) + "°");
+                setConditions(data.days[0].conditions);
             })
             .catch(error => {
-                console.log("API error:", error);
+                console.log(error);
+                let data = {
+                    "resolvedAddress": "vuores",
+                    "days" : [
+                        {
+                            "tempmax": 84.3,
+                            "tempmin": 64.7,
+                            "conditions": "Sunny"
+                        }
+                    ]
+                };
+                setLocationInput(data.resolvedAddress);
+                setTempMax(convertFahrenheitToCelcius(data.days[0].tempmax) + "°");
+                setTempMin(convertFahrenheitToCelcius(data.days[0].tempmin) + "°");
+                setConditions(data.days[0].conditions);
             });
-
-        for (let i = 0; i < data.length; i++) {
-            handleFethingWeatherInfo(data[i].location, data[i].date);
-        }
     }
-    */
 
-    const fetchUserWeathersAsync = async () => {
+    // GET USER LOCATIONS WEATHERS
+
+    const fetchUserLocationsWeathersAsync = async () => {
         const req = {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${loginData}` }
@@ -108,15 +130,16 @@ function MyLocation(props) {
         }
 
         setWeatherDataList(weathers);
-
-        /*
-        for (let i = 0; i < data.length; i++) {
-            handleFethingWeatherInfo(data[i].location, data[i].date);
-        }
-        */
     }
 
-    const handleAddingUserWeatherInfo = (location, date) => {
+    // SAVE USER LOCATION
+
+    const handleSaveUserLocation = (event) => {
+        event.preventDefault();
+        saveUserLocation(locationInput, dateInput);
+    }
+
+    const saveUserLocation = (location, date) => {
         const req = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${loginData}` },
@@ -145,6 +168,34 @@ function MyLocation(props) {
             .catch(error => {
                 console.log("API error:", error);
             });
+    }
+
+    // DELETE USER LOCATION
+
+    const handleDeleteUserLocation = (location, date) => {
+        deleteUserLocationAsync(location, date);
+    };
+
+    const deleteUserLocationAsync = async (location ,date) => {
+        const req = {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${loginData}` }
+        };
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/user/locations/weather?location${location}&date=${date}`, req);
+        let data = await response.json();
+
+        if (!response.ok) {
+            console.log("deleting user locations is rejected: " + response);
+        }
+
+        if (response.ok) {
+            console.log(data);
+            setWeatherDataList((prevList) =>
+            prevList.filter(
+                (weather) => !(weather.location === location && weather.date === date)
+            )
+        );
+        }
     }
 
     /*
@@ -213,26 +264,49 @@ function MyLocation(props) {
 
                 <div className="text-center mt-4">
                     <button
-                        onClick={handleFetchingLocations}
+                        onClick={handleGetWeather}
                         className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
                     >
                         Get Weather
                     </button>
                 </div>
+                <div className="flex justify-center items-center mt-10">
+                    <Card
+                        location={locationInput}
+                        date={dateInput}
+                        tempMax={tempMax}
+                        tempMin={tempMin}
+                        conditions={conditions}
+                    />
+                    <button
+                        onClick={handleSaveUserLocation}
+                        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
+                    >
+                        Save
+                    </button>
+                </div>
                 </div>
             </div>
 
-            <div className="flex flex-col items-center gap-6 mt-10">
+            <div className="flex items-center gap-6 mt-10">
                 {
                     weatherDataList.map((weather, index) => (
-                        <Card
-                            key={index}
-                            location={weather.location}
-                            date={weather.date}
-                            tempMax={weather.tempMax}
-                            tempMin={weather.tempMin}
-                            conditions={weather.conditions}
-                        />
+                        <div key={index} className="flex items-center gap-4">
+                            <Card
+                                key={index}
+                                location={weather.location}
+                                date={weather.date}
+                                tempMax={weather.tempMax}
+                                tempMin={weather.tempMin}
+                                conditions={weather.conditions}
+                            />
+                            <button
+                                onClick={() => handleDeleteUserLocation(weather.location, weather.date)}
+                                className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
+                            >
+                                X
+                            </button>
+                        </div>
                     ))
                 }
             </div>
