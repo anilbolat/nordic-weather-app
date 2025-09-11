@@ -181,7 +181,7 @@ function MyLocation(props) {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${loginData}` }
         };
-        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/user/locations/weather?location${location}&date=${date}`, req);
+        const response = await fetch(`${WEATHER_API_BASE_URL}/api/v1/user/locations/weather?location=${location}&date=${date}`, req);
         let data = await response.json();
 
         if (!response.ok) {
